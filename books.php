@@ -97,9 +97,78 @@
             margin: 0.5rem 0
         }
 
+        .book-card h4 {
+            /* make title modest but bold */
+            font-size: 1rem;
+            /* roughly normal-text size (16 px) */
+            font-weight: 700;
+            /* bold */
+            margin: 0.4rem 0;
+            /* a bit of breathing room */
+        }
+
         .meta {
             font-size: .9rem;
             color: #555
+        }
+
+        /* --- prettier details panel --- */
+        .details p {
+            margin: 0 0 .6rem 0;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e8eefc;
+            color: #3856a7;
+            font-size: .75rem;
+            font-weight: 600;
+            border-radius: 12px;
+            padding: .15rem .55rem;
+            margin: .15rem .25rem .15rem 0;
+        }
+
+        .badge.tag {
+            background: #f5e9d8;
+            color: #a45a00;
+        }
+
+        /* ---------- floating details panel ---------- */
+        .book-card {
+            position: relative;
+        }
+
+        .book-card .details {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            background: #fff;
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .2);
+            padding: 0.8rem;
+            font-size: 0.9rem;
+            line-height: 1.35;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s;
+            z-index: 10;
+        }
+
+        .book-card:hover .details {
+            /* desktop hover */
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        @media (hover: none) {
+
+            /* phones & iPads */
+            .book-card:active .details {
+                opacity: 1;
+                pointer-events: auto;
+            }
         }
     </style>
 
@@ -119,13 +188,31 @@
                 <div class="book-card">
                     <img src="<?= htmlspecialchars($img) ?>" srcset="<?= htmlspecialchars($srcset) ?>"
                         sizes="(max-width: 600px) 50vw, 220px" alt="Cover of <?= htmlspecialchars($b['title']) ?>">
+
                     <h4><?= htmlspecialchars($b['title']) ?></h4>
                     <p class="price">₹<?= $price ?></p>
-                    <?php if (!empty($b['description'])): ?>
-                        <p><?= nl2br(htmlspecialchars($b['description'])) ?></p>
-                    <?php endif; ?>
-                    <p class="meta"><?= htmlspecialchars($b['categories']) ?></p>
-                    <p class="meta"><?= htmlspecialchars($b['tags']) ?></p>
+
+                    <!-- hidden panel that shows on hover / tap -->
+                    <div class="details">
+                        <?php if (!empty($b['description'])): ?>
+                            <p><?= nl2br(htmlspecialchars($b['description'])) ?></p>
+                        <?php endif; ?>
+                        <?php
+                        // split on | or , then trim each fragment
+                        $cats = array_filter(array_map('trim', preg_split('/[|,]/', $b['categories'])));
+                        $tags = array_filter(array_map('trim', preg_split('/[|,]/', $b['tags'])));
+                        ?>
+                        <p>
+                            <?php foreach ($cats as $c): ?>
+                                <span class="badge"><?= htmlspecialchars($c) ?></span>
+                            <?php endforeach; ?>
+                        </p>
+                        <p>
+                            <?php foreach ($tags as $t): ?>
+                                <span class="badge tag"><?= htmlspecialchars($t) ?></span>
+                            <?php endforeach; ?>
+                        </p>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -163,6 +250,14 @@
     <script src="revolution/js/revolution.tools.min.js"></script>
     <script src="revolution/js/rs6.min.js"></script>
     <script src="revolution/js/slider.js"></script>
+
+    <style>
+        /* left-justify text inside the hover panel */
+        .book-card .details {
+            text-align: left;
+        }
+    </style>
+
     <!-- Javascript end-->
 
 </body>
