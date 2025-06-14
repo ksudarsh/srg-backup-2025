@@ -150,6 +150,7 @@
             padding: 0.8rem;
             font-size: 0.9rem;
             line-height: 1.35;
+            text-align: left;
             opacity: 0;
             pointer-events: none;
             transition: opacity .25s;
@@ -250,14 +251,6 @@
     <script src="revolution/js/revolution.tools.min.js"></script>
     <script src="revolution/js/rs6.min.js"></script>
     <script src="revolution/js/slider.js"></script>
-
-    <style>
-        /* left-justify text inside the hover panel */
-        .book-card .details {
-            text-align: left;
-        }
-    </style>
-
     <!-- Javascript end-->
 
 </body>
