@@ -267,7 +267,7 @@
                     fn($w) => "{$coverDir}/{$slug}_{$w}.jpg {$w}w",
                     $sizes
                 ));
-                $price = number_format($b['price_cents'] / 100, 2); // Rupees & Paise
+                $price = number_format($b['price_paise'] / 100, 2); // Rupees & Paise
                 ?>
                 <div class="book-card">
                     <img src="<?= htmlspecialchars($img) ?>" srcset="<?= htmlspecialchars($srcset) ?>"
