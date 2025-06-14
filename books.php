@@ -151,6 +151,89 @@
             font-size: 0.9rem;
             line-height: 1.35;
             text-align: left;
+
+            /* Example conceptual improvements */
+            .book-card {
+                border: 1px solid #e0e0e0;
+                /* Lighter border */
+                border-radius: 8px;
+                padding: 1rem;
+                text-align: center;
+                display: flex;
+                /* Use flexbox for internal layout */
+                flex-direction: column;
+                /* Stack content vertically */
+                justify-content: space-between;
+                /* Distribute space */
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                /* Subtle shadow */
+                transition: transform 0.2s ease-in-out;
+                /* Add hover effect */
+            }
+
+            .book-card:hover {
+                transform: translateY(-5px);
+                /* Lift card slightly on hover */
+            }
+
+            .book-card img {
+                max-width: 100%;
+                height: auto;
+                /* Maintain aspect ratio */
+                border-radius: 4px;
+                margin-bottom: 0.8rem;
+                /* Space below image */
+            }
+
+            .book-card h4 {
+                font-size: 1.1rem;
+                /* Slightly larger title */
+                font-weight: 700;
+                margin: 0 0 0.4rem 0;
+                color: #333;
+                /* Darker title color */
+            }
+
+            .book-card .price {
+                font-weight: bold;
+                margin: 0.5rem 0;
+                color: #007bff;
+                /* Highlight price */
+            }
+
+            .book-card .meta {
+                font-size: .85rem;
+                /* Slightly smaller meta */
+                color: #777;
+                /* Lighter meta color */
+                margin-bottom: 0.8rem;
+                /* Space below meta */
+            }
+
+            /* Refine details panel appearance */
+            .book-card .details {
+                /* Existing styles */
+                background: #fff;
+                border: 1px solid #ccc;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, .25);
+                /* Stronger shadow for visibility */
+                /* Ensure it fits within the card or overlays cleanly */
+                /* Consider adding a close button for touch */
+            }
+
+            .badge {
+                /* Existing styles */
+                padding: .2rem .6rem;
+                /* Slightly more padding */
+                margin: .2rem .3rem .2rem 0;
+                font-size: .8rem;
+                /* Slightly larger badge text */
+            }
+
+            .badge.tag {
+                /* Existing styles */
+            }
+
             opacity: 0;
             pointer-events: none;
             transition: opacity .25s;
