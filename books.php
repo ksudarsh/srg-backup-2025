@@ -55,7 +55,8 @@
     /* Configuration */
     $csvFile = __DIR__ . '/books/books.csv';   // path to the metadata file
     $coverDir = 'books/covers';                 // web-visible folder
-    $sizes = [200, 400, 600, 800, 1000, 1200, 1600, 2400]; // eight sizes you keep
+    // $sizes = [200, 400, 600, 800, 1000, 1200, 1600, 2400]; // eight sizes you keep
+    $sizes = [400]; // eight sizes you keep
     $defaultW = 400;                            // which size to show in <img src=...>
     
     /* Read CSV into $books */
