@@ -58,11 +58,14 @@
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="featured-imagebox featured-imagebox-post style3">
                             <div class="ttm-post-thumbnail featured-thumbnail">
-                                <img class="img-fluid" src="blog/blog-1.jpg" alt="image">
+                                <img class="img-fluid"
+                                    src="blog/an-understanding-of-spiritual-intelligence-(si)-from-vedanta.jpg"
+                                    alt="image">
                             </div>
                             <div class="featured-content featured-content-post">
                                 <div class="post-title featured-title">
-                                    <h5><a href="blog/blog-1.pdf" target="_blank">An understanding of Spiritual
+                                    <h5><a href="blog/an-understanding-of-spiritual-intelligence-(si)-from-vedanta.pdf"
+                                            target="_blank">An understanding of Spiritual
                                             Intelligence (SI) from Vedanta</a></h5>
                                 </div>
                             </div>
@@ -72,11 +75,13 @@
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="featured-imagebox featured-imagebox-post style3">
                             <div class="ttm-post-thumbnail featured-thumbnail">
-                                <img class="img-fluid" src="blog/blog-2.jpg" alt="image">
+                                <img class="img-fluid"
+                                    src="blog/working-model-for-gaining-spiritual-intelligence-(si).jpg" alt="image">
                             </div>
                             <div class="featured-content featured-content-post">
                                 <div class="post-title featured-title">
-                                    <h5><a href="blog/blog-2.pdf" target="_blank">Working model for gaining Spiritual
+                                    <h5><a href="blog/working-model-for-gaining-spiritual-intelligence-(si).pdf"
+                                            target="_blank">Working model for gaining Spiritual
                                             Intelligence (SI)</a></h5>
                                 </div>
                             </div>
@@ -86,26 +91,26 @@
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="featured-imagebox featured-imagebox-post style3">
                             <div class="ttm-post-thumbnail featured-thumbnail">
-                                <img class="img-fluid" src="blog/blog-3.jpg" alt="image">
+                                <img class="img-fluid" src="blog/the-philosophy-of-work.jpg" alt="image">
                             </div>
                             <div class="featured-content featured-content-post">
                                 <div class="post-title featured-title">
-                                    <h5><a href="blog/blog-3.pdf" target="_blank">The philosophy of work</a></h5>
+                                    <h5><a href="blog/the-philosophy-of-work.pdf" target="_blank">The philosophy of
+                                            work</a></h5>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-
-
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="featured-imagebox featured-imagebox-post style3">
                             <div class="ttm-post-thumbnail featured-thumbnail">
-                                <img class="img-fluid" src="blog/blog-4.jpg" alt="image">
+                                <img class="img-fluid" src="blog/the_pdca_cycle.jpg" alt="image">
                             </div>
                             <div class="featured-content featured-content-post">
                                 <div class="post-title featured-title">
-                                    <h5><a href="blog/blog-4.pdf" target="_blank">The PDCA cycle & negative feedback
+                                    <h5><a href="blog/the_pdca_cycle.pdf" target="_blank">The PDCA cycle & negative
+                                            feedback
                                             loop in the Bhagavad Gita</a></h5>
                                 </div>
                             </div>
