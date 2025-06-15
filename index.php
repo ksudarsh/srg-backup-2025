@@ -261,9 +261,53 @@
 
 
 
-
-
     <!-- TESTIMONIALS STARTS-->
+    <?php
+    $testimonials_csv_file = __DIR__ . '/testimonials/testimonials.csv';
+    $testimonials_text_dir = __DIR__ . '/testimonials/contents/'; // Corrected path to text subfolder
+    $testimonials_data = [];
+
+    if (file_exists($testimonials_csv_file) && ($handle = fopen($testimonials_csv_file, 'r')) !== false) {
+        $header = fgetcsv($handle, 0, ',', '"', '\\');
+        if ($header) { // Ensure header was read
+            while (($row = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
+                if (count($header) == count($row)) {
+                    $testimonial_item = array_combine($header, $row);
+
+                    $image_filename = trim($testimonial_item['image_filename'] ?? 'female.png');
+                    $image_path = 'images/' . $image_filename;
+
+                    $rating = isset($testimonial_item['rating']) ? (int) $testimonial_item['rating'] : 5;
+                    if ($rating < 1 || $rating > 5) {
+                        $rating = 5;
+                    }
+
+                    $testimonial_text_content = "No testimonial text provided.";
+                    $source = trim($testimonial_item['testimonial_source'] ?? '');
+                    if (strlen($source) > 4 && substr(strtolower($source), -4) === '.txt') {
+                        $text_file_path = $testimonials_text_dir . $source;
+                        if (file_exists($text_file_path)) {
+                            $testimonial_text_content = file_get_contents($text_file_path);
+                        } else {
+                            $testimonial_text_content = "Error: Testimonial file not found (" . htmlspecialchars($source) . ")";
+                        }
+                    } elseif (!empty($source)) {
+                        $testimonial_text_content = $source;
+                    }
+
+                    $testimonials_data[] = [
+                        'name' => trim($testimonial_item['name'] ?? 'Anonymous'),
+                        'image_path' => $image_path,
+                        'rating' => $rating,
+                        'text' => nl2br(htmlspecialchars($testimonial_text_content)),
+                    ];
+                }
+            }
+        }
+        fclose($handle);
+    }
+    ?>
+
     <section class="ttm-row testimonial-section bg-img2 clearfix">
         <div class="container">
 
@@ -277,93 +321,34 @@
                 <div class="col-lg-10 col-md-12 m-auto">
                     <div class="testimonial-slide style1 owl-carousel res-991-pt-40" data-item="1" data-nav="true"
                         data-dots="false" data-auto="false">
-                        <div class="testimonials style1 text-center">
-                            <div class="testimonial-content">
-                                <div class="testimonial-avatar">
-                                    <div class="testimonial-img">
-                                        <img class="img-center img-rounded" src="images/female.png"
-                                            alt="testimonial-img">
+                        <?php if (!empty($testimonials_data)): ?>
+                            <?php foreach ($testimonials_data as $testimonial): ?>
+                                <div class="testimonials style1 text-center">
+                                    <div class="testimonial-content">
+                                        <div class="testimonial-avatar">
+                                            <div class="testimonial-img">
+                                                <img class="img-center img-rounded lazyload"
+                                                    data-src="<?= htmlspecialchars($testimonial['image_path']) ?>"
+                                                    alt="Image of <?= htmlspecialchars($testimonial['name']) ?>">
+                                            </div>
+                                        </div>
+                                        <p><?= $testimonial['text'] ?></p>
+                                        <div class="ttm-ratting-star">
+                                            <?php for ($i = 0; $i < $testimonial['rating']; $i++): ?>
+                                                <i class="fa fa-star"></i>
+                                            <?php endfor; ?>
+                                        </div>
+                                        <div class="testimonial-caption">
+                                            <h6><?= htmlspecialchars($testimonial['name']) ?></h6>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <p>Namaste. It has been over 2years of association with my guru, Smt. Usha Narasimhan.
-                                    Getting to know her was a life changing for me. She has been very patiently teaching
-                                    us the Deshikar stotrams and taking Kalakshepams. She has helped me mold myself and
-                                    taught beautifully as to how one can blend spirituality in our day to day lives. My
-                                    pranams to God for having introduced me to my Guru, Prathama Acharyan.</p>
-
-                                <div class="ttm-ratting-star">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-
-                                <div class="testimonial-caption">
-                                    <h6>Bhuvana Ramki</h6>
-                                </div>
-
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="testimonials style1 text-center">
+                                <p>No testimonials available at the moment.</p>
                             </div>
-                        </div>
-
-                        <div class="testimonials style1 text-center">
-                            <div class="testimonial-content">
-                                <div class="testimonial-avatar">
-                                    <div class="testimonial-img">
-                                        <img class="img-center img-rounded" src="images/female.png"
-                                            alt="testimonial-img">
-                                    </div>
-                                </div>
-                                <p>Usha ma'am is an excellent teacher. As well as reciting shlokas, we learn their
-                                    meanings too. This helps us to visualise while chanting. Chanting shlokas has
-                                    brought alot of positivity,peace and prosperity to my home as well as increased
-                                    focus and concentration in my work. I got to know about mythological stories over
-                                    the classes. The classes are worth the time and I recommend adults n children to
-                                    join it.</p>
-                                <div class="ttm-ratting-star">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="testimonial-caption">
-                                    <h6>KS Neelamma</h6>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="testimonials style1 text-center">
-                            <div class="testimonial-content">
-                                <div class="testimonial-avatar">
-                                    <div class="testimonial-img">
-                                        <img class="img-center img-rounded" src="images/male.png" alt="testimonial-img">
-                                    </div>
-                                </div>
-                                <p>Srimathe Ramanujaya namaha.
-                                    I am Chithra Sridharan, 65 years, from Pammal, chennai.
-                                    I joined the class recently only. (6 months)
-                                    Reciting slokas knowing it's meaning gives strength to my mind.
-                                    I get ATHMARTHA pleasure and feel going nearer
-                                    to HIM by attending the kalashebam and sthothra
-                                    classes of Smt. Usha Narasimhan.
-                                    I am blessed very much for getting such a
-                                    nice GURU.</p>
-                                <div class="ttm-ratting-star">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="testimonial-caption">
-                                    <h6>Sridharan V</h6>
-                                </div>
-                            </div>
-                        </div>
-
-
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

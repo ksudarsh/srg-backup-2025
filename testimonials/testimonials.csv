@@ -1,0 +1,5 @@
+name,image_filename,rating,testimonial_source
+"Bhuvana Ramki","female.png",5,"bhuvanaramki.txt"
+"KS Neelamma","female.png",5,"ksneelamma.txt"
+"Sridharan V","male.png",5,"sridharanv.txt"
+"Another Person","female.png",4,"This is a shorter testimonial directly in the CSV, demonstrating that feature. It does not require a separate text file."
