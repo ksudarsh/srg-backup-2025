@@ -54,83 +54,39 @@
         <div class="ttm-row grid-section clearfix">
             <div class="container">
                 <div class="row">
+                    <?php
+                    $csvFile = __DIR__ . '/blog/articles.csv';
+                    $articles = [];
+                    if (($handle = fopen($csvFile, 'r')) !== false) {
+                        $header = fgetcsv($handle, 0, ',', '"', '\\'); // Read the header row
+                        while (($row = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
+                            if (count($header) == count($row)) { // Ensure row has same number of columns as header
+                                $articles[] = array_combine($header, $row);
+                            }
+                        }
+                        fclose($handle);
+                    }
 
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="featured-imagebox featured-imagebox-post style3">
-                            <div class="ttm-post-thumbnail featured-thumbnail">
-                                <img class="img-fluid"
-                                    src="blog/an-understanding-of-spiritual-intelligence-(si)-from-vedanta.jpg"
-                                    alt="image">
-                            </div>
-                            <div class="featured-content featured-content-post">
-                                <div class="post-title featured-title">
-                                    <h5><a href="blog/an-understanding-of-spiritual-intelligence-(si)-from-vedanta.pdf"
-                                            target="_blank">An understanding of Spiritual
-                                            Intelligence (SI) from Vedanta</a></h5>
+                    $contentDir = 'blog/content/'; // Web-accessible path to the content
+                    
+                    foreach ($articles as $article):
+                        $title = htmlspecialchars($article['title']);
+                        $jpgPath = htmlspecialchars($contentDir . $article['jpg']);
+                        $pdfPath = htmlspecialchars($contentDir . $article['pdf']);
+                        ?>
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="featured-imagebox featured-imagebox-post style3">
+                                <div class="ttm-post-thumbnail featured-thumbnail">
+                                    <img class="img-fluid" src="<?= $jpgPath ?>" alt="Image for <?= $title ?>">
+                                </div>
+                                <div class="featured-content featured-content-post">
+                                    <div class="post-title featured-title">
+                                        <h5><a href="<?= $pdfPath ?>" target="_blank"><?= $title ?></a></h5>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="featured-imagebox featured-imagebox-post style3">
-                            <div class="ttm-post-thumbnail featured-thumbnail">
-                                <img class="img-fluid"
-                                    src="blog/working-model-for-gaining-spiritual-intelligence-(si).jpg" alt="image">
-                            </div>
-                            <div class="featured-content featured-content-post">
-                                <div class="post-title featured-title">
-                                    <h5><a href="blog/working-model-for-gaining-spiritual-intelligence-(si).pdf"
-                                            target="_blank">Working model for gaining Spiritual
-                                            Intelligence (SI)</a></h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="featured-imagebox featured-imagebox-post style3">
-                            <div class="ttm-post-thumbnail featured-thumbnail">
-                                <img class="img-fluid" src="blog/the-philosophy-of-work.jpg" alt="image">
-                            </div>
-                            <div class="featured-content featured-content-post">
-                                <div class="post-title featured-title">
-                                    <h5><a href="blog/the-philosophy-of-work.pdf" target="_blank">The philosophy of
-                                            work</a></h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="featured-imagebox featured-imagebox-post style3">
-                            <div class="ttm-post-thumbnail featured-thumbnail">
-                                <img class="img-fluid" src="blog/the_pdca_cycle.jpg" alt="image">
-                            </div>
-                            <div class="featured-content featured-content-post">
-                                <div class="post-title featured-title">
-                                    <h5><a href="blog/the_pdca_cycle.pdf" target="_blank">The PDCA cycle & negative
-                                            feedback
-                                            loop in the Bhagavad Gita</a></h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="featured-imagebox featured-imagebox-post style3">
-                            <div class="ttm-post-thumbnail featured-thumbnail">
-                                <img class="img-fluid" src="blog/urdhvapundrastotrm.jpg" alt="image">
-                            </div>
-                            <div class="featured-content featured-content-post">
-                                <div class="post-title featured-title">
-                                    <h5><a href="blog/urdhvapundrastotrm.pdf" target="_blank">Urdhva Pundra Dhyana
-                                            Shlokas</a></h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
