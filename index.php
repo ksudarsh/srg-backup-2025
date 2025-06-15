@@ -217,57 +217,40 @@
             </div>
 
             <div class="row">
-                <div class="blog-slide owl-carousel" data-item="3" data-nav="true" data-dots="true" data-auto="true">
+                <div class="blog-slide owl-carousel" data-item="3" data-nav="true" data-dots="false" data-auto="true">
+                    <?php
+                    $csvFile = __DIR__ . '/blog/articles.csv';
+                    $articles = [];
+                    if (($handle = fopen($csvFile, 'r')) !== false) {
+                        $header = fgetcsv($handle, 0, ',', '"', '\\'); // Read the header row
+                        while (($row = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
+                            if (count($header) == count($row)) { // Ensure row has same number of columns as header
+                                $articles[] = array_combine($header, $row);
+                            }
+                        }
+                        fclose($handle);
+                    }
 
-
-                    <div class="featured-imagebox featured-imagebox-post style3">
-                        <div class="ttm-post-thumbnail featured-thumbnail">
-                            <img class="img-fluid" src="blog/blog-1.jpg" alt="">
-                        </div>
-                        <div class="featured-content featured-content-post">
-                            <div class="post-title featured-title">
-                                <h5><a href="blog/blog-1.pdf" target="_blank">An understanding of Spiritual Intelligence
-                                        (SI) from Vedanta</a></h5>
+                    $contentDir = 'blog/content/'; // Web-accessible path to the content
+                    
+                    foreach ($articles as $article):
+                        $title = htmlspecialchars($article['title']);
+                        // Use the 'jpg' column from CSV for the image source
+                        $jpgPath = htmlspecialchars($contentDir . $article['jpg']);
+                        // Use the 'pdf' column from CSV for the link
+                        $pdfPath = htmlspecialchars($contentDir . $article['pdf']);
+                        ?>
+                        <div class="featured-imagebox featured-imagebox-post style3">
+                            <div class="ttm-post-thumbnail featured-thumbnail">
+                                <img class="img-fluid lazyload" data-src="<?= $jpgPath ?>" alt="Image for <?= $title ?>">
+                            </div>
+                            <div class="featured-content featured-content-post">
+                                <div class="post-title featured-title">
+                                    <h5><a href="<?= $pdfPath ?>" target="_blank"><?= $title ?></a></h5>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="featured-imagebox featured-imagebox-post style3">
-                        <div class="ttm-post-thumbnail featured-thumbnail">
-                            <img class="img-fluid" src="blog/blog-2.jpg" alt="">
-                        </div>
-                        <div class="featured-content featured-content-post">
-                            <div class="post-title featured-title">
-                                <h5><a href="blog/blog-2.pdf" target="_blank">Working model for gaining Spiritual
-                                        Intelligence (SI)</a></h5>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="featured-imagebox featured-imagebox-post style3">
-                        <div class="ttm-post-thumbnail featured-thumbnail">
-                            <img class="img-fluid" src="blog/blog-3.jpg" alt="">
-                        </div>
-                        <div class="featured-content featured-content-post">
-                            <div class="post-title featured-title">
-                                <h5><a href="blog/blog-3.pdf" target="_blank">The Philosophy of Work</a></h5>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="featured-imagebox featured-imagebox-post style3">
-                        <div class="ttm-post-thumbnail featured-thumbnail">
-                            <img class="img-fluid" src="blog/blog-4.jpg" alt="">
-                        </div>
-                        <div class="featured-content featured-content-post">
-                            <div class="post-title featured-title">
-                                <h5><a href="blog/blog-4.pdf" target="_blank">The PDCA cycle & negative feedback loop in
-                                        the Bhagavad Gita</a></h5>
-                            </div>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
 
 
                 </div>
