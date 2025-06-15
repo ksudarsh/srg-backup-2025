@@ -117,6 +117,19 @@
                         </div>
                     </div>
 
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="featured-imagebox featured-imagebox-post style3">
+                            <div class="ttm-post-thumbnail featured-thumbnail">
+                                <img class="img-fluid" src="blog/urdhvapundrastotrm.jpg" alt="image">
+                            </div>
+                            <div class="featured-content featured-content-post">
+                                <div class="post-title featured-title">
+                                    <h5><a href="blog/urdhvapundrastotrm.pdf" target="_blank">Urdhva Pundra Dhyana
+                                            Shlokas</a></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>
