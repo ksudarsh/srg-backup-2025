@@ -247,10 +247,21 @@
             pointer-events: auto;
         }
 
+        /* touch-friendly toggle controlled by JS */
         @media (hover: none) {
+            .book-card .details {
+                opacity: 0;
+                pointer-events: none;
+            }
 
-            /* phones & iPads */
-            .book-card:active .details {
+            /* Ensure hover doesn't make it visible on touch, and prevent sticky hover */
+            .book-card:hover .details {
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            /* JS-controlled open state should override hover behavior and be declared last or with higher specificity */
+            .book-card.open .details {
                 opacity: 1;
                 pointer-events: auto;
             }
@@ -305,6 +316,23 @@
     </div> <!-- /container -->
 
     <?php /* -------------- END BOOK LIST -------------- */ ?>
+    <script>
+        /* tap-to-open / tap-again-or-outside to close */
+        document.addEventListener('click', function (e) {
+            const card = e.target.closest('.book-card');
+
+            if (card) {                      // tapped on a card
+                card.classList.toggle('open'); // toggle this one
+                document.querySelectorAll('.book-card.open').forEach(function (c) {
+                    if (c !== card) c.classList.remove('open'); // close others
+                });
+                e.stopPropagation();           // don’t bubble up
+            } else {                         // tapped outside any card
+                document.querySelectorAll('.book-card.open')
+                    .forEach(c => c.classList.remove('open'));
+            }
+        }, true);
+    </script>
 
     <!--site-main end-->
 
