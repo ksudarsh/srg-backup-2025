@@ -17,7 +17,7 @@
                                     <li><i class="fa fa-envelope-o ttm-textcolor-skincolor"></i><a
                                             href="mailto:spiritualintelligenceprogram@gmail.com">
                                             spiritualintelligenceprogram@gmail.com</a></li>
-                                    <li><i class="fa fa-map-marker ttm-textcolor-skincolor"></i>-</li>
+                                    <!-- <li><i class="fa fa-map-marker ttm-textcolor-skincolor"></i>-</li> -->
                                 </ul>
                                 <div class="topbar-right text-right">
                                     <div class="ttm-social-links-wrapper list-inline">
@@ -26,7 +26,7 @@
                                                         class="fa fa-facebook"></i></a></li>
                                             <li><a href="#" class="tooltip-bottom" data-tooltip="Twitter"><i
                                                         class="fa fa-twitter"></i></a></li>
-                                            <li><a href="#" class="tooltip-bottom" data-tooltip="Youtube"><i
+                                            <li><a href="#" class="tooltip-bottom" data-tooltip="YouTube"><i
                                                         class="fa fa-youtube-play"></i></a></li>
                                             <li><a href="#" class="tooltip-bottom" data-tooltip="Instagram"><i
                                                         class="fa fa-instagram"></i></a></li>
