@@ -299,10 +299,34 @@
                 pointer-events: auto;
             }
         }
+
+        /* --- Filter heading --- */
+        .filter-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .filter-header h2 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
     </style>
 
     <div class="container"> <!-- NEW wrapper -->
 
+        <?php if ($filterCategory): ?>
+            <div class="filter-header">
+                <h2>Showing books in category: <strong><?= htmlspecialchars($filterCategory) ?></strong></h2>
+                <a href="books.php">Show All Books</a>
+            </div>
+        <?php elseif ($filterTag): ?>
+            <div class="filter-header">
+                <h2>Showing books with tag: <strong><?= htmlspecialchars($filterTag) ?></strong></h2>
+                <a href="books.php">Show All Books</a>
+            </div>
+        <?php endif; ?>
         <div class="books-grid">
             <?php foreach ($displayBooks as $b): ?>
                 <?php
