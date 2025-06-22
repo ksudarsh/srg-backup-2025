@@ -72,6 +72,39 @@
     }
     ?>
 
+    <?php
+    // Initialize an array to hold books to be displayed
+    $displayBooks = [];
+
+    // Check for category or tag filters in the URL
+    $filterCategory = $_GET['category'] ?? null;
+    $filterTag = $_GET['tag'] ?? null;
+
+    if ($filterCategory || $filterTag) {
+        foreach ($books as $book) {
+            $match = true;
+            if ($filterCategory) {
+                $bookCategories = array_filter(array_map('trim', preg_split('/[|,]/', $book['categories'])));
+                if (!in_array($filterCategory, $bookCategories)) {
+                    $match = false;
+                }
+            }
+            if ($filterTag && $match) { // Only check tags if category filter is met or not present
+                $bookTags = array_filter(array_map('trim', preg_split('/[|,]/', $book['tags'])));
+                if (!in_array($filterTag, $bookTags)) {
+                    $match = false;
+                }
+            }
+            if ($match) {
+                $displayBooks[] = $book;
+            }
+        }
+    } else {
+        // If no filter is set, display all books
+        $displayBooks = $books;
+    }
+    ?>
+
     <style>
         /* minimal styling – tweak / move to your stylesheet later */
         .books-grid {
@@ -271,7 +304,7 @@
     <div class="container"> <!-- NEW wrapper -->
 
         <div class="books-grid">
-            <?php foreach ($books as $b): ?>
+            <?php foreach ($displayBooks as $b): ?>
                 <?php
                 $slug = trim($b['cover_basename']);           // e.g. Divya-Prabandha-Mala-Kusuma
                 $img = "{$coverDir}/{$slug}_{$defaultW}.jpg";
@@ -295,17 +328,19 @@
                         <?php endif; ?>
                         <?php
                         // split on | or , then trim each fragment
-                        $cats = array_filter(array_map('trim', preg_split('/[|,]/', $b['categories'])));
+                        $categories = array_filter(array_map('trim', preg_split('/[|,]/', $b['categories'])));
                         $tags = array_filter(array_map('trim', preg_split('/[|,]/', $b['tags'])));
                         ?>
                         <p>
-                            <?php foreach ($cats as $c): ?>
-                                <span class="badge"><?= htmlspecialchars($c) ?></span>
+                            <?php foreach ($categories as $category): ?>
+                                <a href="books.php?category=<?= urlencode($category) ?>"
+                                    class="badge"><?= htmlspecialchars($category) ?></a>
                             <?php endforeach; ?>
                         </p>
                         <p>
-                            <?php foreach ($tags as $t): ?>
-                                <span class="badge tag"><?= htmlspecialchars($t) ?></span>
+                            <?php foreach ($tags as $tag): ?>
+                                <a href="books.php?tag=<?= urlencode($tag) ?>"
+                                    class="badge tag"><?= htmlspecialchars($tag) ?></a>
                             <?php endforeach; ?>
                         </p>
                     </div>
