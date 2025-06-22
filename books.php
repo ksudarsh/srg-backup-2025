@@ -66,7 +66,9 @@
         // ⇩ add size, delimiter, enclosure, escape
         $header = fgetcsv($handle, 0, ',', '"', '\\');
         while (($row = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
-            $books[] = array_combine($header, $row);
+            if (count($header) == count($row)) {
+                $books[] = array_combine($header, $row);
+            }
         }
         fclose($handle);
     }
@@ -109,26 +111,56 @@
         /* minimal styling – tweak / move to your stylesheet later */
         .books-grid {
             display: grid;
+            /* Use grid for responsive layout */
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 1.5rem
+            gap: 1.5rem;
+            padding: 1rem;
+            /* Add some padding around the grid */
         }
 
         .book-card {
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 1rem;
-            text-align: center
+            text-align: center;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            /* Lighter border */
+            display: flex;
+            /* Use flexbox for internal layout */
+            flex-direction: column;
+            /* Stack content vertically */
+            justify-content: space-between;
+            /* Distribute space */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            /* Enhanced subtle shadow */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            /* Add hover effect */
+            position: relative;
+            /* For positioning the details panel */
+            overflow: hidden;
+            /* Hide overflowing details panel content */
         }
 
         .book-card img {
             max-width: 100%;
             height: auto;
-            border-radius: 4px
+            border-radius: 4px;
+            margin-bottom: 0.8rem;
+            /* Space below image */
+            object-fit: contain;
+            /* Ensure image fits without cropping */
+            max-height: 200px;
+            /* Limit image height for consistency */
         }
 
         .price {
             font-weight: bold;
-            margin: 0.5rem 0
+            margin: 0.5rem 0;
+            font-size: 1.25rem;
+            /* Larger price */
+            color: #007bff;
+            /* Highlight price */
         }
 
         .book-card h4 {
@@ -138,17 +170,124 @@
             font-weight: 700;
             /* bold */
             margin: 0.4rem 0;
+            /* Adjust margin */
             /* a bit of breathing room */
+            font-size: 1.15rem;
+            /* Slightly larger title */
+            color: #333;
+            /* Darker title color */
+            white-space: nowrap;
+            /* Prevent title from wrapping */
+            overflow: hidden;
+            /* Hide overflow */
+            text-overflow: ellipsis;
+            /* Add ellipsis for long titles */
+            position: relative;
+            /* For tooltip positioning */
         }
 
         .meta {
             font-size: .9rem;
-            color: #555
+            color: #555;
+            font-size: .85rem;
+            /* Slightly smaller meta */
+            color: #777;
+            /* Lighter meta color */
+            margin-bottom: 0.8rem;
+            /* Space below meta */
         }
 
         /* --- prettier details panel --- */
         .details p {
             margin: 0 0 .6rem 0;
+        }
+
+        /* --- Tooltip on Title Hover --- */
+        .book-card h4[title]:hover::after,
+        .book-card h4[title]:hover::before {
+            opacity: 1;
+            visibility: visible;
+            transition-delay: 0.3s;
+        }
+
+        .book-card h4[title]::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            line-height: 1.4;
+            white-space: normal;
+            text-align: center;
+            width: max-content;
+            max-width: 220px;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+
+        .book-card h4[title]::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: -1px;
+            border: 6px solid transparent;
+            border-top-color: #333;
+            z-index: 101;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+
+        /* --- details panel --- */
+        .book-card .details {
+            position: absolute;
+            bottom: 0;
+            /* Start from the bottom */
+            left: 0;
+            right: 0;
+            background: #f8f9fa;
+            /* Light background for details */
+            border-top: 1px solid #e0e0e0;
+            /* Separator line */
+            border-radius: 0 0 8px 8px;
+            /* Match card border-radius */
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+            /* Subtle shadow above */
+            padding: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            text-align: left;
+            opacity: 0;
+            transform: translateY(100%);
+            /* Start hidden below the card */
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            pointer-events: none;
+            /* Disable interaction when hidden */
+            z-index: 10;
+            max-height: 80%;
+            /* Limit height of details panel */
+            overflow-y: auto;
+            /* Enable scrolling for long descriptions */
+        }
+
+        .book-card.open .details {
+            opacity: 1;
+            transform: translateY(0);
+            /* Slide up to visible position */
+            pointer-events: auto;
+            /* Enable interaction when open */
         }
 
         .badge {
@@ -158,8 +297,13 @@
             font-size: .75rem;
             font-weight: 600;
             border-radius: 12px;
-            padding: .15rem .55rem;
+            padding: .2rem .6rem;
+            /* Slightly more padding */
             margin: .15rem .25rem .15rem 0;
+            /* Adjust margin */
+            text-decoration: none;
+            /* Remove underline from links */
+            transition: background-color 0.2s ease;
         }
 
         .badge.tag {
@@ -167,137 +311,13 @@
             color: #a45a00;
         }
 
-        /* ---------- floating details panel ---------- */
-        .book-card {
-            position: relative;
+        .badge:hover {
+            background-color: #d0d8f0;
+            /* Darker on hover */
         }
 
-        .book-card .details {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            right: 8px;
-            background: #fff;
-            border: 1px solid #aaa;
-            border-radius: 6px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, .2);
-            padding: 0.8rem;
-            font-size: 0.9rem;
-            line-height: 1.35;
-            text-align: left;
-
-            /* Example conceptual improvements */
-            .book-card {
-                border: 1px solid #e0e0e0;
-                /* Lighter border */
-                border-radius: 8px;
-                padding: 1rem;
-                text-align: center;
-                display: flex;
-                /* Use flexbox for internal layout */
-                flex-direction: column;
-                /* Stack content vertically */
-                justify-content: space-between;
-                /* Distribute space */
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                /* Subtle shadow */
-                transition: transform 0.2s ease-in-out;
-                /* Add hover effect */
-            }
-
-            .book-card:hover {
-                transform: translateY(-5px);
-                /* Lift card slightly on hover */
-            }
-
-            .book-card img {
-                max-width: 100%;
-                height: auto;
-                /* Maintain aspect ratio */
-                border-radius: 4px;
-                margin-bottom: 0.8rem;
-                /* Space below image */
-            }
-
-            .book-card h4 {
-                font-size: 1.1rem;
-                /* Slightly larger title */
-                font-weight: 700;
-                margin: 0 0 0.4rem 0;
-                color: #333;
-                /* Darker title color */
-            }
-
-            .book-card .price {
-                font-weight: bold;
-                margin: 0.5rem 0;
-                color: #007bff;
-                /* Highlight price */
-            }
-
-            .book-card .meta {
-                font-size: .85rem;
-                /* Slightly smaller meta */
-                color: #777;
-                /* Lighter meta color */
-                margin-bottom: 0.8rem;
-                /* Space below meta */
-            }
-
-            /* Refine details panel appearance */
-            .book-card .details {
-                /* Existing styles */
-                background: #fff;
-                border: 1px solid #ccc;
-                box-shadow: 0 8px 25px rgba(0, 0, 0, .25);
-                /* Stronger shadow for visibility */
-                /* Ensure it fits within the card or overlays cleanly */
-                /* Consider adding a close button for touch */
-            }
-
-            .badge {
-                /* Existing styles */
-                padding: .2rem .6rem;
-                /* Slightly more padding */
-                margin: .2rem .3rem .2rem 0;
-                font-size: .8rem;
-                /* Slightly larger badge text */
-            }
-
-            .badge.tag {
-                /* Existing styles */
-            }
-
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity .25s;
-            z-index: 10;
-        }
-
-        .book-card:hover .details {
-            /* desktop hover */
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* touch-friendly toggle controlled by JS */
-        @media (hover: none) {
-            .book-card .details {
-                opacity: 0;
-                pointer-events: none;
-            }
-
-            /* Ensure hover doesn't make it visible on touch, and prevent sticky hover */
-            .book-card:hover .details {
-                opacity: 0;
-                pointer-events: none;
-            }
-
-            /* JS-controlled open state should override hover behavior and be declared last or with higher specificity */
-            .book-card.open .details {
-                opacity: 1;
-                pointer-events: auto;
-            }
+        .badge.tag:hover {
+            background-color: #e0d4c0;
         }
 
         /* --- Filter heading --- */
@@ -305,12 +325,133 @@
             margin-bottom: 2rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid #ddd;
+            padding: 1rem;
+            /* Add padding */
+            background-color: #f8f9fa;
+            /* Light background */
+            border-radius: 8px;
+            /* Rounded corners */
+            text-align: center;
         }
 
         .filter-header p {
             margin: 0 0 0.25rem;
             font-size: 1rem;
             font-weight: normal;
+            margin: 0 0 0.5rem;
+            /* Adjust margin */
+            font-size: 1.1rem;
+            /* Slightly larger font */
+            color: #333;
+        }
+
+        .filter-header a {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .filter-header a:hover {
+            background-color: #0056b3;
+        }
+
+        /* New button style */
+        .view-details-btn {
+            background-color: #28a745;
+            /* Green color */
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            /* Space above the button */
+            transition: background-color 0.2s ease;
+            width: fit-content;
+            /* Adjust width to content */
+            align-self: center;
+            /* Center the button in flex container */
+            text-decoration: none;
+            /* If it's an anchor */
+        }
+
+        .view-details-btn:hover {
+            background-color: #218838;
+            /* Darker green on hover */
+        }
+
+        /* Hide the button when details are open */
+        .book-card.open .view-details-btn {
+            display: none;
+        }
+
+        /* Add a close button for the details panel */
+        .details-close-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #555;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0.2rem;
+            transition: color 0.2s ease;
+        }
+
+        .details-close-btn:hover {
+            color: #000;
+        }
+
+        /* Ensure the summary content is always visible */
+        .book-summary {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1;
+            /* Allow summary to take available space */
+            padding-bottom: 1rem;
+            /* Space for the button */
+        }
+
+        /* Adjust card height when details are open to accommodate content */
+        .book-card.open {
+            height: auto;
+            /* Allow height to expand */
+            min-height: 350px;
+            /* Ensure a minimum height for open state */
+        }
+
+        /* Adjust for smaller screens */
+        @media (max-width: 768px) {
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 1rem;
+            }
+
+            .book-card {
+                padding: 0.8rem;
+            }
+
+            .book-card h4 {
+                font-size: 1rem;
+            }
+
+            .book-card .price {
+                font-size: 1.1rem;
+            }
+
+            .view-details-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
         }
     </style>
 
@@ -339,16 +480,20 @@
                 $price = number_format($b['price_paise'] / 100, 2); // Rupees & Paise
                 ?>
                 <div class="book-card">
-                    <img src="<?= htmlspecialchars($img) ?>" srcset="<?= htmlspecialchars($srcset) ?>"
-                        sizes="(max-width: 600px) 50vw, 220px" alt="Cover of <?= htmlspecialchars($b['title']) ?>">
+                    <div class="book-summary">
+                        <img src="<?= htmlspecialchars($img) ?>" srcset="<?= htmlspecialchars($srcset) ?>"
+                            sizes="(max-width: 600px) 50vw, 220px" alt="Cover of <?= htmlspecialchars($b['title']) ?>">
 
-                    <h4><?= htmlspecialchars($b['title']) ?></h4>
-                    <p class="price">₹<?= $price ?></p>
+                        <h4 title="<?= htmlspecialchars($b['title']) ?>"><?= htmlspecialchars($b['title']) ?></h4>
+                        <p class="price">₹<?= $price ?></p>
+                        <button class="view-details-btn">View Details</button>
+                    </div>
 
                     <!-- hidden panel that shows on hover / tap -->
                     <div class="details">
+                        <button class="details-close-btn">&times;</button>
                         <?php if (!empty($b['description'])): ?>
-                            <p><?= nl2br(htmlspecialchars($b['description'])) ?></p>
+                            <p><?= nl2br(htmlspecialchars($b['description'])) ?></p> <!-- nl2br converts newlines to <br> -->
                         <?php endif; ?>
                         <?php
                         // split on | or , then trim each fragment
@@ -356,37 +501,58 @@
                         $tags = array_filter(array_map('trim', preg_split('/[|,]/', $b['tags'])));
                         ?>
                         <p>
-                            <?php foreach ($categories as $category): ?>
-                                <a href="books.php?category=<?= urlencode($category) ?>"
-                                    class="badge"><?= htmlspecialchars($category) ?></a>
-                            <?php endforeach; ?>
+                            <?php if (!empty($categories)): ?>
+                                <?php foreach ($categories as $category): ?>
+                                    <a href="books.php?category=<?= urlencode($category) ?>"
+                                        class="badge"><?= htmlspecialchars($category) ?></a>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </p>
                         <p>
-                            <?php foreach ($tags as $tag): ?>
-                                <a href="books.php?tag=<?= urlencode($tag) ?>"
-                                    class="badge tag"><?= htmlspecialchars($tag) ?></a>
-                            <?php endforeach; ?>
+                            <?php if (!empty($tags)): ?>
+                                <?php foreach ($tags as $tag): ?>
+                                    <a href="books.php?tag=<?= urlencode($tag) ?>"
+                                        class="badge tag"><?= htmlspecialchars($tag) ?></a>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </p>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
-
     </div> <!-- /container -->
 
     <?php /* -------------- END BOOK LIST -------------- */ ?>
     <script>
         /* tap-to-open / tap-again-or-outside to close */
         document.addEventListener('click', function (e) {
-            const card = e.target.closest('.book-card');
+            const clickedButton = e.target.closest('.view-details-btn');
+            const clickedCloseButton = e.target.closest('.details-close-btn');
+            const clickedCard = e.target.closest('.book-card');
 
-            if (card) {                      // tapped on a card
-                card.classList.toggle('open'); // toggle this one
-                document.querySelectorAll('.book-card.open').forEach(function (c) {
-                    if (c !== card) c.classList.remove('open'); // close others
-                });
-                e.stopPropagation();           // don’t bubble up
-            } else {                         // tapped outside any card
+            if (clickedButton) {
+                // Tapped on a "View Details" button
+                const card = clickedButton.closest('.book-card');
+                if (card) {
+                    // Close all other open cards
+                    document.querySelectorAll('.book-card.open').forEach(function (c) {
+                        if (c !== card) {
+                            c.classList.remove('open');
+                        }
+                    });
+                    // Toggle the clicked card
+                    card.classList.toggle('open');
+                }
+                e.stopPropagation(); // Prevent document click listener from immediately closing it
+            } else if (clickedCloseButton) {
+                // Tapped on the close button inside details
+                const card = clickedCloseButton.closest('.book-card');
+                if (card) {
+                    card.classList.remove('open');
+                }
+                e.stopPropagation(); // Prevent document click listener from immediately closing it
+            } else if (!clickedCard) {
+                // Tapped outside any book card
                 document.querySelectorAll('.book-card.open')
                     .forEach(c => c.classList.remove('open'));
             }
