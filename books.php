@@ -202,6 +202,16 @@
             margin: 0 0 .6rem 0;
         }
 
+        .details-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #333;
+            white-space: normal;
+            /* Allow wrapping */
+            text-align: left;
+        }
+
         /* --- Tooltip on Title Hover --- */
         .book-card h4[title]:hover::after,
         .book-card h4[title]:hover::before {
@@ -492,6 +502,7 @@
                     <!-- hidden panel that shows on hover / tap -->
                     <div class="details">
                         <button class="details-close-btn">&times;</button>
+                        <h5 class="details-title"><?= htmlspecialchars($b['title']) ?></h5>
                         <?php if (!empty($b['description'])): ?>
                             <p><?= nl2br(htmlspecialchars($b['description'])) ?></p> <!-- nl2br converts newlines to <br> -->
                         <?php endif; ?>
@@ -525,38 +536,43 @@
     <?php /* -------------- END BOOK LIST -------------- */ ?>
     <script>
         /* tap-to-open / tap-again-or-outside to close */
-        document.addEventListener('click', function (e) {
-            const clickedButton = e.target.closest('.view-details-btn');
-            const clickedCloseButton = e.target.closest('.details-close-btn');
-            const clickedCard = e.target.closest('.book-card');
+        document.addEventListener('DOMContentLoaded', function () {
+            document.body.addEventListener('click', function (e) {
+                const viewBtn = e.target.closest('.view-details-btn');
+                const closeBtn = e.target.closest('.details-close-btn');
+                const card = e.target.closest('.book-card');
 
-            if (clickedButton) {
-                // Tapped on a "View Details" button
-                const card = clickedButton.closest('.book-card');
-                if (card) {
-                    // Close all other open cards
-                    document.querySelectorAll('.book-card.open').forEach(function (c) {
-                        if (c !== card) {
-                            c.classList.remove('open');
-                        }
+                if (closeBtn) {
+                    // If close button is clicked, just close its card.
+                    closeBtn.closest('.book-card').classList.remove('open');
+                    return;
+                }
+
+                if (viewBtn) {
+                    const targetCard = viewBtn.closest('.book-card');
+                    const wasOpen = targetCard.classList.contains('open');
+
+                    // First, close all open cards.
+                    document.querySelectorAll('.book-card.open').forEach(c => {
+                        c.classList.remove('open');
                     });
-                    // Toggle the clicked card
-                    card.classList.toggle('open');
+
+                    // If the target card was not open, open it.
+                    if (!wasOpen) {
+                        targetCard.classList.add('open');
+                    }
+                    // This creates a toggle-like behavior.
+                    return;
                 }
-                e.stopPropagation(); // Prevent document click listener from immediately closing it
-            } else if (clickedCloseButton) {
-                // Tapped on the close button inside details
-                const card = clickedCloseButton.closest('.book-card');
-                if (card) {
-                    card.classList.remove('open');
+
+                // If the click was outside of any card, close all open cards.
+                if (!card) {
+                    document.querySelectorAll('.book-card.open').forEach(c => {
+                        c.classList.remove('open');
+                    });
                 }
-                e.stopPropagation(); // Prevent document click listener from immediately closing it
-            } else if (!clickedCard) {
-                // Tapped outside any book card
-                document.querySelectorAll('.book-card.open')
-                    .forEach(c => c.classList.remove('open'));
-            }
-        }, true);
+            });
+        });
     </script>
 
     <!--site-main end-->
